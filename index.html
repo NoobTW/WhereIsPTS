@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+		integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+		integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+		crossorigin="" />
+	<link rel="stylesheet" href="css/style.css" />
+	<title>公視在哪裡？</title>
+</head>
+
+<body>
+	<div class="container-fluid p-0 h-100 d-flex flex-column">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<a class="navbar-brand" style="color: #fff">公視在哪裡？</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+				aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+				<div class="navbar-nav">
+					<a class="nav-item nav-link active" href="#">地圖查詢</a>
+					<a class="nav-item nav-link" href="#" id="report-new" data-toggle="tooltip" data-placement="bottom"
+						title="點擊地圖任意處即可回報店家">回報店家</a>
+				</div>
+				<form class="form-inline collapsed navbar-right float-right">
+					<input class="form-control mr-sm-2" type="search" placeholder="搜尋" aria-label="搜尋">
+				</form>
+			</div>
+		</nav>
+		<div class="container-fluid h-100 flex-fill d-flex p-0">
+			<div class="row w-100 h-100 m-0 p-0">
+				<div class="col-12 h-100 m-0 p-0">
+					<div id="map" class="h-100"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="modalReport" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<form method="post" action="/" id="form-report">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">回報店家</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-12">
+									<input type="hidden" name="id" readonly>
+									<div class="form-group">
+										<label for="store-name">店家名稱</label>
+										<input type="text" class="form-control" name="name" id="store-name"
+											aria-describedby="store-name" placeholder="真好味美食館" required="true">
+										<small id="emailHelp" class="form-text text-muted">（必填）這間店叫什麼名字呢？</small>
+									</div>
+									<div class="form-group">
+										<label for="store-name">店家經緯度</label>
+										<div class="row">
+											<div class="col-6">
+												<input type="text" class="form-control" name="lat" id="modal-lat"
+													readonly>
+											</div>
+											<div class="col-6">
+												<input type="text" class="form-control" name="lng" id="modal-lng"
+													readonly>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="store-name">店家地址</label>
+										<input type="text" class="form-control" name="address" id="store-address"
+											aria-describedby="store-address" placeholder="高雄市楠梓區高雄大學路700號">
+										<small id="emailHelp" class="form-text text-muted">這間店的地址</small>
+									</div>
+									<div class="form-group">
+										<label for="store-name">新聞頻道</label>
+										<select class="form-control" name="news" id="store-news">
+											<option>公視新聞</option>
+											<option>中天新聞</option>
+											<option>TVBS 新聞</option>
+											<option>民視新聞</option>
+											<option>中視新聞</option>
+											<option>華視新聞</option>
+											<option>三立新聞</option>
+											<option>東森新聞</option>
+											<option>年代新聞</option>
+											<option>非凡新聞</option>
+											<option>壹電視新聞</option>
+											<option>體育新聞</option>
+											<option>不是新聞</option>
+										</select>
+										<small id="emailHelp" class="form-text text-muted">店家正在播放的新聞頻道</small>
+									</div>
+									<div class="form-check">
+										<input type="checkbox" class="form-check-input"
+											id="check-switchable">
+										<label class="form-check-label" for="check-switchable">店家表示可以轉臺</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">算了</button>
+						<button type="submit" class="btn btn-primary" id="send-report">確定回報</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+		integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+		crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+		integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+		crossorigin=""></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.12/dayjs.min.js"></script>
+	<script src="js/all.js"></script>
+</body>
+
+</html>
