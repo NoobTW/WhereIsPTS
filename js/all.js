@@ -24,7 +24,7 @@ if (navigator.geolocation) {
 	}, function(error) {
 		Swal.fire(
 			'定位',
-			'無法使用定位功能',
+			'無法使用定位功能<br><small>(err ' + (error.code) + ': ' + error.message + ')</small>',
 			'warning'
 		  )
 	});
