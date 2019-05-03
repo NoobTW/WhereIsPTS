@@ -15,6 +15,7 @@ html, body{
 
 #infoView{
 	z-index: 999;
+	min-height: 50vh;
 }
 
 #infoView svg{

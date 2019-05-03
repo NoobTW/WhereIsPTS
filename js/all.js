@@ -319,7 +319,7 @@ function showInfo(info) {
 	$('#infoView').addClass('col-md-3').removeClass('hide').html(info);
 	$('#mapView').addClass('col-md-9').removeClass('col-md-12');
 	if (window.innerWidth < 760) {
-		$('#infoView').addClass('h-50').removeClass('h-100');
+		// $('#infoView').addClass('h-50').removeClass('h-100');
 		$('#mapView').addClass('h-50').removeClass('h-100');
 	}
 }
