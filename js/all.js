@@ -57,8 +57,18 @@ $('body').delegate('#report', 'click', function(e) {
 	$('#modalReport input').each(function(i, el) {
 		$(el).val('');
 	});
-	$('#modal-lat').val($(e.target).data('lat'));
-	$('#modal-lng').val($(e.target).data('lng'));
+	var lat = $(e.target).data('lat');
+	var lng = $(e.target).data('lng')
+	$('#modal-lat').val(lat);
+	$('#modal-lng').val(lng);
+	$.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1&accept-language=zh-tw', function(res) {
+		var addr = '';
+		if (res.address.city) addr += res.address.city;
+		if (res.address.state_district) addr += res.address.state_district;
+		if (res.address.road) addr += res.address.road;
+		if (res.address.house_number) addr += res.address.house_number + '號';
+		$('#modalReport input[name="address"]').val(addr);
+	})
 	map.closePopup();
 });
 
