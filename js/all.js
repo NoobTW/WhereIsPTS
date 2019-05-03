@@ -1,4 +1,4 @@
-var API_PATH = 'http://gundambox.ddns.net:6480';
+var API_PATH = '';
 var map;
 var currentPosition = null;
 var lastSearchPosition = null;
