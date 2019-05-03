@@ -1,6 +1,7 @@
 var API_PATH = 'http://gundambox.ddns.net:6480';
 var map;
 var currentPosition = null;
+var lastSearchPosition = null;
 var currentMarker = null;
 var markers = [];
 
@@ -43,12 +44,14 @@ map.on('click', function(e) {
 
 map.on('moveend', function() {
 	var center = map.getCenter();
-	Array.from(markers).forEach(function(m) {
-		map.removeLayer(m);
-	});
-	markers = [];
-	getNearbyStore([center.lat, center.lng])
-})
+	if (distance([center.lat, center.lng], lastSearchPosition) >= 5) {
+		Array.from(markers).forEach(function(m) {
+			map.removeLayer(m);
+		});
+		markers = [];
+		getNearbyStore([center.lat, center.lng]);
+	}
+});
 
 $('body').delegate('#report', 'click', function(e) {
 	$('#modalReport input').each(function(i, el) {
@@ -174,6 +177,7 @@ $('#form-report').on('submit', function(e) {
 });
 
 function getNearbyStore(latlng, cb) {
+	lastSearchPosition = latlng;
 	$.getJSON(API_PATH + '/api/v1/store/list?lat=' + latlng[0] + '&lng=' + latlng[1], function(res) {
 		markers = [];
 		var stores = res.result;
@@ -275,4 +279,24 @@ function hideInfo() {
 	$('#infoView').removeClass('col-md-3').addClass('hide');
 	$('#mapView').addClass('col-md-12').removeClass('col-md-9');
 	$('#mapView').addClass('h-100').removeClass('h-50');
+}
+
+function distance(pos1, pos2) {
+	console.log(pos1)
+	console.log(pos2)
+	var R = 6371;
+	var dLat = deg2rad(pos2[0]-pos1[0]);
+	var dLon = deg2rad(pos2[1]-pos1[1]);
+	var a =
+		Math.sin(dLat/2) * Math.sin(dLat/2) +
+		Math.cos(deg2rad(pos1[0])) * Math.cos(deg2rad(pos2[0])) *
+		Math.sin(dLon/2) * Math.sin(dLon/2)
+		;
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	var d = R * c;
+	return d;
+}
+
+function deg2rad(deg) {
+return deg * (Math.PI/180)
 }
