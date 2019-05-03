@@ -22,7 +22,11 @@ if (navigator.geolocation) {
 		currentMarker.addTo(map);
 		getNearbyStore(currentPosition)
 	}, function(error) {
-		alert(error.message)
+		Swal.fire(
+			'定位',
+			'無法使用定位功能',
+			'warning'
+		  )
 	});
 	navigator.geolocation.watchPosition(function(position) {
 		currentPosition = [position.coords.latitude, position.coords.longitude];
@@ -108,6 +112,40 @@ $('body').delegate('.vote', 'click', function(e) {
 	$('#modalReport').modal('show');
 });
 
+$('body').delegate('.delete', 'click', function(e) {
+	var storeId = $(e.target).data('store-id');
+	Swal.fire({
+		title: '你確定嗎？',
+		text: '你確定這個店家已經不存在嗎？',
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		cancelButtonText: '否',
+		confirmButtonText: '是，回報不存在'
+	}).then((result) => {
+		if (result.value) {
+			$.ajax({
+					url: API_PATH + '/api/v1/store/' + storeId,
+					method: 'DELETE',
+					success: function() {
+						Swal.fire(
+							'已回報',
+							'謝謝您！我們將會審查這家店家的狀況。',
+							'success'
+						);
+						Array.from(markers).forEach(function(m) {
+							map.removeLayer(m);
+						});
+						markers = [];
+						var center = map.getCenter();
+						getNearbyStore([center.lat, center.lng]);
+					}
+			})
+		}
+	})
+});
+
 $('#report-new').tooltip({ trigger: 'click' });
 
 $('#form-report').on('submit', function(e) {
@@ -191,7 +229,7 @@ function getNearbyStore(latlng, cb) {
 	$.getJSON(API_PATH + '/api/v1/store/list?lat=' + latlng[0] + '&lng=' + latlng[1], function(res) {
 		markers = [];
 		var stores = res.result;
-		Array.from(stores).forEach(function(store) {
+		Array.from(stores.filter(function(x) { return x.enable === true })).forEach(function(store) {
 			var m = L.marker(store.location);
 			m.store = store;
 			m.store.id = store.sid;
@@ -217,9 +255,11 @@ function getNearbyStore(latlng, cb) {
 				+ '<div><canvas id="news-vote-chart"></canvas></div>'
 				+ '<div class="mt-2">'
 				+ '<button href="#" class="btn btn-sm btn-outline-primary vote" data-store-id="' + store.id
-				+ '">我要回報新聞頻道</button>'
+				+ '">回報頻道</button>'
 				+ '<button href="#" class="btn btn-sm btn-outline-info ml-1 edit" data-store-id="' + store.id
 				+ '">我要修改</button>'
+				+ '<button href="#" class="btn btn-sm btn-outline-danger ml-1 delete" data-store-id="' + store.id
+				+ '">店家不存在</button>'
 				+ '<div class="text-muted float-right"><small>上次回報：' + dayjs(store.lastModified).format('MM-DD HH:mm') + '</small></div>'
 				+ '</div>'
 				);
