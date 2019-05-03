@@ -5,7 +5,7 @@
 	"background_color": "#212529",
 	"theme_color": "#212529",
 	"display": "fullscreen",
-	"orientation": "standalone",
+	"orientation": "portrait",
 	"description": "找出播放優質頻道的店家",
 	"icons": [{
 	  "src": "icon/android-icon-48x48.png",
