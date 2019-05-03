@@ -181,7 +181,6 @@ function getNearbyStore(latlng, cb) {
 	$.getJSON(API_PATH + '/api/v1/store/list?lat=' + latlng[0] + '&lng=' + latlng[1], function(res) {
 		markers = [];
 		var stores = res.result;
-		console.log(stores)
 		Array.from(stores).forEach(function(store) {
 			var m = L.marker(store.location);
 			m.store = store;
@@ -215,7 +214,7 @@ function getNearbyStore(latlng, cb) {
 				+ '</div>'
 				);
 				map.invalidateSize();
-				map.flyTo(store.location, 18);console.log(store.votes)
+				map.flyTo(store.location, 18);
 				if (store.votes) {
 					var votes = store.votes.sort(function(a, b) { return b.vote_count - a.vote_count });
 					var chart = new Chart($('#news-vote-chart'), {
@@ -282,8 +281,6 @@ function hideInfo() {
 }
 
 function distance(pos1, pos2) {
-	console.log(pos1)
-	console.log(pos2)
 	var R = 6371;
 	var dLat = deg2rad(pos2[0]-pos1[0]);
 	var dLon = deg2rad(pos2[1]-pos1[1]);
