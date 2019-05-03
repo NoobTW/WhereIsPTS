@@ -35,9 +35,10 @@
 		</nav>
 		<div class="container-fluid h-100 flex-fill d-flex p-0">
 			<div class="row w-100 h-100 m-0 p-0">
-				<div class="col-12 h-100 m-0 p-0">
+				<div class="col-md-12 m-0 p-0" id="mapView">
 					<div id="map" class="h-100"></div>
 				</div>
+				<div class="col-md-3 m-0 pt-2 shadow hide" id="infoView"></div>
 			</div>
 		</div>
 	</div>
@@ -82,26 +83,26 @@
 											aria-describedby="store-address" placeholder="高雄市楠梓區高雄大學路700號">
 										<small id="emailHelp" class="form-text text-muted">這間店的地址</small>
 									</div>
-									<div class="form-group">
+									<div class="form-group vote-news">
 										<label for="store-name">新聞頻道</label>
 										<select class="form-control" name="news" id="store-news">
-											<option>公視新聞</option>
-											<option>中天新聞</option>
-											<option>TVBS 新聞</option>
-											<option>民視新聞</option>
-											<option>中視新聞</option>
-											<option>華視新聞</option>
-											<option>三立新聞</option>
-											<option>東森新聞</option>
-											<option>年代新聞</option>
-											<option>非凡新聞</option>
-											<option>壹電視新聞</option>
-											<option>體育新聞</option>
-											<option>不是新聞</option>
+											<option value="1">公視新聞</option>
+											<option value="2">TVBS 新聞</option>
+											<option value="3">中天新聞</option>
+											<option value="4">民視新聞</option>
+											<option value="5">中視新聞</option>
+											<option value="6">華視新聞</option>
+											<option value="7">三立新聞</option>
+											<option value="8">東森新聞</option>
+											<option value="9">年代新聞</option>
+											<option value="10">非凡新聞</option>
+											<option value="11">壹電視新聞</option>
+											<option value="12">體育新聞</option>
+											<option value="13">不是新聞</option>
 										</select>
 										<small id="emailHelp" class="form-text text-muted">店家正在播放的新聞頻道</small>
 									</div>
-									<div class="form-check">
+									<div class="form-group form-check">
 										<input type="checkbox" class="form-check-input"
 											id="check-switchable">
 										<label class="form-check-label" for="check-switchable">店家表示可以轉臺</label>
@@ -129,6 +130,8 @@
 	<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
 		integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
 		crossorigin=""></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js" integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.12/dayjs.min.js"></script>
 	<script src="js/all.js"></script>
 </body>
