@@ -229,7 +229,7 @@ function getNearbyStore(latlng, cb) {
 	$.getJSON(API_PATH + '/api/v1/store/list?lat=' + latlng[0] + '&lng=' + latlng[1], function(res) {
 		markers = [];
 		var stores = res.result;
-		Array.from(stores.filter(function(x) { return x.enable === true })).forEach(function(store) {
+		Array.from(stores).forEach(function(store) {
 			var m = L.marker(store.location);
 			m.store = store;
 			m.store.id = store.sid;
