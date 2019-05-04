@@ -241,8 +241,9 @@ function getNearbyStore(latlng, cb) {
 			Array.from(store.votes).forEach(function(vote) {
 				if (vote.vote_count > maxChannelCount) {
 					maxChannelCount = vote.vote_count;
-					maxChannel = vote.channel;
+					maxChannel = vote.cid;
 				}
+				console.log(maxChannel);
 			});
 			m.on('click', function () {
 				showInfo(
@@ -270,7 +271,7 @@ function getNearbyStore(latlng, cb) {
 					var chart = new Chart($('#news-vote-chart'), {
 						type: 'horizontalBar',
 						data: {
-							labels: votes.map(function(x) { return queryNews(x.channel) }),
+							labels: votes.map(function(x) { return queryNews(x.cid) }),
 							datasets: [{
 								label: '民眾回報的店家新聞',
 								backgroundColor: 'rgb(255, 99, 132)',
